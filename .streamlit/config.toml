@@ -1,0 +1,9 @@
+[theme]
+primaryColor = "#FF4B4B" # Valentine Red/Pink
+backgroundColor = "#FFF5F5" # Soft Blush Background
+secondaryBackgroundColor = "#FFE0E0"
+textColor = "#31333F"
+font = "sans serif"
+
+[client]
+showSidebarNavigation = true 
