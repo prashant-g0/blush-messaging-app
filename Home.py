@@ -1,19 +1,22 @@
 import streamlit as st
-
-if "db" not in st.session_state:
-    st.session_state.db = {}
+from engine.manager import get_total_blushes
 
 st.set_page_config(
     page_title="Blush",
     page_icon="💗"
 )
 
-st.title("Blush 💗")
-st.subheader("Some words are meant to be read only once.")
+st.title("Welcome to Blush 💗")
+st.subheader("### The one-time, encrypted secret messenger for your feelings.")
+
+total_count = get_total_blushes()
+st.metric(label="Total Blushes Created", value=f"{total_count} 💖")
+
+st.divider()
 
 st.write("""
-         Welcome to Blush. Create a secret message for your loved ones that
-         disappears forever once it's been read.
+         Blush allows you to send a message that burns after it's been read.
+         No accounts, no tracking, just pure expressions.
 
          **Use the sidebar on the left to get started!**
 """)
