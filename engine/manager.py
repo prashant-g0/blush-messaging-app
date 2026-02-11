@@ -129,3 +129,4 @@ def get_total_blushes():
     except Exception as e:
         print(f"Error fetching count: {e}")
         return 0
+    

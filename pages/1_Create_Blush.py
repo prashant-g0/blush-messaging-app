@@ -32,5 +32,3 @@ if st.button("Generate Secure Blush"):
         st.error("Something went wrong with the database. Please try again!")
 else:
     st.warning("Please fill in all fields to create your Blush.")
-    
-
