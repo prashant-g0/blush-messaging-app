@@ -32,7 +32,6 @@ if st.button("Generate Secure Blush"):
                 st.code(invite_text, language=None)
                 st.caption("Click the copy icon in the top right of thr box above.")
                 
-                st.info("💡 Share either the code or the link. Your partner will still need the password!")
             else:
                 st.error("Something went wrong with the database. Please try again!")
     else:

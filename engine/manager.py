@@ -38,6 +38,7 @@ def create_blush(name, message, password):
 
     try:
         supabase.table("blushes").insert(blush_data).execute()
+        increment_global_count()
         return code
     except Exception as e:
         print(f"Error creating a blush: {e}")
@@ -121,12 +122,30 @@ def burn_blush(code):
         print(f"Error burning blush: {e}")
         return False
     
+def increment_global_count():
+    """Triggers the atomic database-level increment."""
+    try:
+        # No logic needed here, just trigger the function
+        supabase.rpc("increment_stats").execute()
+    except Exception as e:
+        print(f"Stats error: {e}")
+    
 def get_total_blushes():
-    """Returns the total number of blushes ever created."""
+    """Returns the total number of blushes in db."""
     try:
         response = supabase.table("blushes").select("*", count="exact").execute()
         return response.count if response.count else 0
     except Exception as e:
         print(f"Error fetching count: {e}")
         return 0
+    
+def get_all_time_count():
+    """Fetches the persistent count from the stats table."""
+    try:
+        res = supabase.table("global_stats").select("total_created").eq("id", 1).single().execute()
+        return res.data['total_created'] if res.data else 0
+    except Exception:
+        return 0
+    
+
     
