@@ -23,9 +23,9 @@ if st.session_state.auth_code is None:
             placeholder="e.g., AB12CD"
         ).upper()
 
-        pass_input = st.text_input("Enter the Secret Password:", type="password")
-        
-        if st.button("Unlock Secret"):
+        pass_input = st.text_input("Enter the Secret Password:", type="password", placeholder="This keeps the Blush just between you two")
+        st.write("Open only when you're ready!")
+        if st.button("Open Gently 🌸"):
             if code_input and pass_input:
                 success, data, status = verify_and_lock(code_input, pass_input)
                 
@@ -38,15 +38,15 @@ if st.session_state.auth_code is None:
                 else:
                     # Access Denial Messages
                     if status == "reading":
-                        st.error("🔒 Access Denied: Someone is currently reading this.")
+                        st.error("🔒 Access Denied: Someone else is reading this Blush right now.")
                     elif status == "rejected":
-                        st.error("🚫 This message was rejected by your partner.")
+                        st.error("🚫 This Blush was left unanswered.")
                     elif status == "opened":
-                        st.info("⌛ This code had a good covo, but the love cycle of this message has ended.")
+                        st.info("💗 This Blush held a beautiful exchange, but its moment has now passed.")
                     else:
                         st.error(data) # "Incorrect password" or "Code not found"
             else:
-                st.warning("Please enter both credentials.")
+                st.warning("Both keys are needed to unlock this Blush.")
 
 # --- PHASE 2: INTERACTION (Show after successful Unlock) ---
 else:
@@ -56,29 +56,29 @@ else:
 
     # UI for UNREAD messages (Now in 'reading' state in DB)
     if status == "reading":
-        st.balloons()
-        st.success(f"A message from {data['sender_name']} has been unlocked!")
+        st.snow()
+        st.success(f"A Blush from {data['sender_name']} is waiting for you!")
         st.write("---")
-        st.subheader("The Secret Message:")
-        st.info(data['message'])
+        st.write("The Blush, Just for you:")
+        st.text_area(data['message'], height="content")
         
         st.write("### Your Response")
-        reply_text = st.text_area("Write a reply...", placeholder="What's on your mind?", max_chars=500)
+        reply_text = st.text_area("Write a reply...", placeholder="What's on your mind...", max_chars=500)
         
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("Send Reply"):
+            if st.button("Send Reply 💗"):
                 if reply_text:
                     if submit_reply(code, reply_text):
-                        st.success("Reply sent! The cycle continues.")
+                        st.success("The Blush continues 🌷")
                         # Clear session so they can't see it again
                         st.session_state.auth_code = None 
                         st.rerun()
                 else:
-                    st.warning("Please write something first.")
+                    st.warning("Say at least one honest line.")
         
         with col2:
-            if st.button("Don't Reply (Reject)"):
+            if st.button("Let It Stay Unanswered"):
                 if reject_blush(code):
                     st.warning("Message rejected.")
                     st.session_state.auth_code = None
@@ -86,15 +86,17 @@ else:
 
     # UI for REPLIED messages (Now transitioning to 'opened')
     elif status == "replied":
-        st.write("### The Final Conversation")
+        st.write("### The Final Exchange")
         st.subheader(f"From {data['sender_name']}:")
         st.info(data['message'])
         
-        st.subheader("Your Partner's Reply:")
+        st.subheader("Their Reply:")
         st.success(data['reply'])
         
-        st.toast("This message is now archived and will expire soon.")
+        st.toast("This Blush will fade away soon.")
         
-        if st.button("Finish & Exit"):
+        if st.button("Close the Blush 💗"):
             st.session_state.auth_code = None
             st.rerun()
+
+st.markdown("<p style='text-align: center; color:#888;'>2026 | Prashant Gupta | Developed with Blush 💗</p>", unsafe_allow_html=True)
