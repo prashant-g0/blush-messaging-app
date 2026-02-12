@@ -14,7 +14,15 @@ st.title("Unlock a Blush 🔓")
 # --- PHASE 1: LOGIN (Show only if not authenticated) ---
 if st.session_state.auth_code is None:
     with st.container():
-        code_input = st.text_input("Enter the 6-digit Secret Code:").upper()
+        url_params = st.query_params
+        default_code = url_params.get("code", "") 
+
+        code_input = st.text_input(
+            "Enter the 6-digit Secret Code:", 
+            value=default_code, 
+            placeholder="e.g., AB12CD"
+        ).upper()
+
         pass_input = st.text_input("Enter the Secret Password:", type="password")
         
         if st.button("Unlock Secret"):
@@ -55,7 +63,7 @@ else:
         st.info(data['message'])
         
         st.write("### Your Response")
-        reply_text = st.text_area("Write a reply...", placeholder="What's on your mind?")
+        reply_text = st.text_area("Write a reply...", placeholder="What's on your mind?", max_chars=500)
         
         col1, col2 = st.columns(2)
         with col1:
