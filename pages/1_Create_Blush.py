@@ -32,7 +32,7 @@ if st.button("🔐Lock this Feeling"):
                 if final_code:
                     st.balloons()
 
-                    base_url = "http://localhost:8501/Open_Blush" 
+                    base_url = "https://blushnow.streamlit.app/Open_Blush" 
                     shareable_link = f"{base_url}?code={final_code}"
                     invite_text = f"Hey! You've received a Blush from {name} 🌸\nIt's meant to be opened just once.\n\nLink: {shareable_link}\nPassword: {password}"
                     
