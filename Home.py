@@ -44,9 +44,15 @@ st.info("👈 Select 'Create Blush' from the sidebar.")
 with st.container():
     with st.expander("How it works & Privacy"):
         st.write("""
-                - **Encryption:** Your message is encrypted with your password *before* it reaches our database (AES-256).
+                - **Encryption:** Your message is encrypted *before* it reaches our database (AES-256).
                 - **Auto-Purge:** Every message is automatically deleted from our servers 6 hours after creation.
                 - **One-Shot:** Once a conversation cycle (open -> reply) is complete, the access code expires.
+    """)
+    with st.expander("Usage Policy"):
+        st.write("""
+                - **No Logs:** We don't store your plain-text secrets.
+                - **Reporting:** Misuse is tracked via IP to keep the community safe.
+                - **Database:** We don't read or store messages. We apply encryption before storage and minimal safeguards to discourage misuse.
     """)
     
     col1, col2, col3 = st.columns(3)

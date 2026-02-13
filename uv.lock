@@ -62,6 +62,7 @@ name = "blush-messaging-app"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "cryptography" },
     { name = "python-dotenv" },
     { name = "streamlit" },
     { name = "supabase" },
@@ -69,6 +70,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "cryptography", specifier = ">=46.0.4" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "streamlit", specifier = ">=1.54.0" },
     { name = "supabase", specifier = ">=2.27.3" },

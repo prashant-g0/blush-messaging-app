@@ -5,6 +5,7 @@ import hashlib
 from datetime import datetime
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from engine.encryption import encrypt_text
 
 load_dotenv() 
 URL = os.getenv("SUPABASE_URL") 
@@ -23,17 +24,19 @@ def code_generator():
         if not result.data:
             return code
 
-def create_blush(name, message, password):
+def create_blush(name, message, password, creator_ip):
     """Hashes the pssword & insert the new message into supabase."""
     code = code_generator() 
     password_hash = hashlib.sha256(password.encode()).hexdigest() 
+    encrypted_msg = encrypt_text(message, password)
 
     blush_data = {
         "code": code,
         "sender_name": name,
-        "message": message,
+        "message": encrypted_msg,
         "password_hash":password_hash,
-        "status": "unread"
+        "status": "unread",
+        "creator_ip": creator_ip
     }
 
     try:
@@ -79,10 +82,12 @@ def verify_and_lock(code, input_password):
 
     return False, "Unexpected error.", status
 
-def submit_reply(code, reply_text):
+def submit_reply(code, reply_text, password):
     """Saves the reply & marks the Blush as replied."""
+
+    encrypted_reply = encrypt_text(reply_text, password)
     data = {
-        "reply": reply_text,
+        "reply": encrypted_reply,
         "status":"replied",
         "replied_at": datetime.now().isoformat()
     }
@@ -147,5 +152,29 @@ def get_all_time_count():
     except Exception:
         return 0
     
+def report_blush(code, reporter_ip):
+    try:
+        response = supabase.table("blushes").select("*").eq("code", code).execute()
+        
+        if not response.data or len(response.data) == 0:
+            print("Report Failed: No blush found with that code.")
+            return False
+        
+        blush = response.data[0]
 
-    
+        report_data = {
+            "original_code": str(blush.get('code', '')),
+            "sender_name": str(blush.get('sender_name', 'Anonymous')),
+            "message_encrypted": str(blush.get('message', '')),
+            "sender_ip": str(blush.get('creator_ip', 'unknown')),
+            "reporter_ip": str(reporter_ip)
+        }
+        
+        supabase.table("reported_blushes").insert(report_data).execute()
+        
+        supabase.table("blushes").update({"status": "reported"}).eq("code", code).execute()
+        
+        return True
+    except Exception as e:
+        print(f"Report Failed at catch: {e}")
+        return False
