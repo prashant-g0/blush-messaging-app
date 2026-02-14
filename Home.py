@@ -30,6 +30,8 @@ with st.container(border=True):
 
 st.divider()
 
+st.info("👈 Select 'Create Blush' from the sidebar.")
+
 st.write("""
          Blush lets you send a message that disappears the moment it's read.\n
          **No account. No tracking. No history**.\n
@@ -40,7 +42,7 @@ st.write("""
          It's read once, felt deeply, and then it fades - **just like some moments should**.
 """)
 
-st.info("👈 Select 'Create Blush' from the sidebar.")
+
 with st.container():
     with st.expander("How it works & Privacy"):
         st.write("""
