@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "cryptography>=46.0.4",
     "python-dotenv>=1.2.1",
+    "st-copy-to-clipboard>=0.1.6",
     "streamlit>=1.54.0",
     "supabase>=2.27.3",
 ]

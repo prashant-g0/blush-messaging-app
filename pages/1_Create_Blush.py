@@ -1,4 +1,5 @@
 import streamlit as st
+from st_copy_to_clipboard import st_copy_to_clipboard
 from engine.manager import create_blush
 from engine.safety import is_safe, get_remote_ip, creation_clearance
 
@@ -34,12 +35,9 @@ if st.button("🔐Lock this Feeling"):
 
                     base_url = "https://blushnow.streamlit.app/Open_Blush" 
                     shareable_link = f"{base_url}?code={final_code}"
-                    invite_text = f"Hey! You've received a Blush from {name} 🌸\nIt's meant to be opened just once.\n\nLink: {shareable_link}\nPassword: {password}"
+                    invite_text = f"Hey! I left a secret message for you on Blush. 🌸\nIt's meant to be opened just once.\n\nLink: {shareable_link}\nPassword: {password}\n\n(This will vanish in 6 hours!)"
                     
-                    
-                    st.write("### Share them carefully:")
-                    st.code(invite_text, language=None)
-                    st.caption("Click the copy icon in the top right of thr box above.")
+                    st_copy_to_clipboard(invite_text, before_copy_label="Copy the Blush 💌", after_copy_label="Copied 💗")
                     
                 else:
                     st.error("The Blush slipped for a moment. Please try again!")
