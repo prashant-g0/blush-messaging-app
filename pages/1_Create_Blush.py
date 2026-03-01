@@ -4,7 +4,7 @@ from engine.manager import create_blush
 from engine.safety import is_safe, get_remote_ip, creation_clearance
 
 st.set_page_config(
-    page_title="Create a Blush", 
+    page_title="Blush | Create a Blush", 
     page_icon="💖"
 )
 

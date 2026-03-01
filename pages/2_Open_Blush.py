@@ -3,7 +3,7 @@ from engine.manager import verify_and_lock, submit_reply, reject_blush, report_b
 from engine.encryption import decrypt_text
 from engine.safety import is_safe, get_remote_ip
 
-st.set_page_config(page_title="Open a Blush", page_icon="🔓")
+st.set_page_config(page_title="Blush | Open a Blush", page_icon="🔓")
 
 # 1. Initialize Session State
 if "auth_code" not in st.session_state:
