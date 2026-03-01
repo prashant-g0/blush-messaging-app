@@ -178,3 +178,51 @@ def report_blush(code, reporter_ip):
     except Exception as e:
         print(f"Report Failed at catch: {e}")
         return False
+    
+def get_confessions(search_query=None):
+    """Fetches confessions, optionally filtered by receiver name."""
+    try:
+        query = supabase.table("confessions").select("*").order("created_at", desc=True)
+        if search_query:
+            # Case-insensitive partial match
+            query = query.ilike("receiver_name", f"%{search_query}%")
+        
+        result = query.execute()
+        return result.data
+    except Exception as e:
+        print(f"Error fetching confessions: {e}")
+        return []
+
+def create_confession(receiver_name, content, creator_ip):
+    """Inserts a new public confession into the database."""
+    data = {
+        "receiver_name": receiver_name,
+        "content": content,
+        "creator_ip": creator_ip
+    }
+    try:
+        supabase.table("confessions").insert(data).execute()
+        current_all_time = get_all_time_conf()
+        supabase.table("global_stats").update({"confessions_total": current_all_time + 1}).eq("id", 1).execute()
+        return True
+    except Exception as e:
+        print(f"Error creating confession: {e}")
+        return False
+    
+def get_total_conf():
+    """Returns the count of confessions currently on the wall (Live)."""
+    try:
+        response = supabase.table("confessions").select("*", count="exact").execute()
+        return response.count if response.count is not None else 0
+    except Exception as e:
+        print(f"Error fetching current confession count: {e}")
+        return 0
+
+def get_all_time_conf():
+    """Fetches the all time total confessions from the global_stats table"""
+    try:
+        response = supabase.table("global_stats").select("confessions_total").eq("id", 1).single().execute()
+        return response.data["confessions_total"] if response.data else 0
+    except Exception as e:
+        return 0
+
