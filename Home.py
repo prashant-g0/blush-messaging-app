@@ -1,8 +1,8 @@
 import streamlit as st
-from engine.manager import get_total_blushes, get_all_time_count
+from engine.manager import get_total_blushes, get_all_time_count, get_all_time_conf, get_total_conf
 
 st.set_page_config(
-    page_title="Blush",
+    page_title="Blush | Your Secret Vault ",
     page_icon="💗",
     layout="centered"
 )
@@ -14,47 +14,55 @@ with st.container(border=True):
     st.divider()
     st.subheader("""
                 A one-time, encrypted note for the words you can't say twice.
-                A Private space to share what your heart won't repeat.
-                For feelings meant to be read once, and felt forever.  
+                Whether it's a private secret meant for one, or a public confession meant for the world. 
     """)
 
-    total_count = get_all_time_count()
-    db_count = get_total_blushes()
+total_blushes = get_all_time_count()
+db_blushes = get_total_blushes()
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric(label="**Blushes Shared, All Time!**", value=f"{total_count} 💖")
+total_conf = get_all_time_conf()
+db_conf = get_total_conf()
 
-    with col2:
-        st.metric(label="**Blushes Still Waiting to be Read.**", value=f"{db_count} 😍")
+col1, col2 = st.columns(2)
+with col1:
+    with st.container(border=True):
+        st.markdown("### Private Blushes")
+        st.metric(label="**All Time Shared!**", value=f"{total_blushes} 💖")
+        st.metric(label="**Waiting to be Read**", value=f"{db_blushes} 😍")
+
+with col2:
+    with st.container(border=True):
+        st.markdown("### 🕊️ Public Confessions")
+        st.metric(label="**Total Confessions**", value=f"{total_conf} 💌")
+        st.metric(label="**Currently on the Wall**", value=f"{db_conf} 📨")
 
 st.divider()
 
-st.info("👈 Select 'Create Blush' from the sidebar.")
+st.info("👈 Use the sidebar to **Create a Blush** or visit the **Wall of Confessions**.")
 
 st.write("""
-         Blush lets you send a message that disappears the moment it's read.\n
-         **No account. No tracking. No history**.\n
-         Just a quiet place for honest feelings - Shared once, then gone.\n
-         **Lucky if they reply,  because then it becomes a complete conversation.**
-         \n\n
-         Blush is where you leave a note that doesn't stay.\n
-         It's read once, felt deeply, and then it fades - **just like some moments should**.
-""")
+        Blush is where you leave a note that doesn't stay.
+        It's a quiet place for honest feelings - shared once, then gone.
+         
+        Choose your path:
+        1. **Private Blush:** An encrypted, one-time message for a specific person.
+        2. **Wall of Confessions:** A public, anonymous post on our community board.
+        """)
 
 
 with st.container():
     with st.expander("How it works & Privacy"):
         st.write("""
-                - **Encryption:** Your message is encrypted *before* it reaches our database (AES-256).
-                - **Auto-Purge:** Every message is automatically deleted from our servers 6 hours after creation.
-                - **One-Shot:** Once a conversation cycle (open -> reply) is complete, the access code expires.
+                - **Private Encryption:** Private messages use AES-256 encryption. We cannot read them.
+                - **Auto-Purge:** Private messages vanish after 6 hours. Public confessions vanish after 7 days.
+                - **Zero Tracking:** No accounts, no history, and no personal logs.
     """)
-    with st.expander("Usage Policy"):
+        
+    with st.expander("Usage & Safety Policy"):
         st.write("""
-                - **No Logs:** We don't store your plain-text secrets.
-                - **Reporting:** Misuse is tracked via IP to keep the community safe.
-                - **Database:** We don't read or store messages. We apply encryption before storage and minimal safeguards to discourage misuse.
+                - **Safety Engine:** All messages (public & private) pass through a safety filter to prevent abuse.
+                - **Anonymity:** We don't store your identity, but we apply minimal safeguards to discourage misuse.
+                - **No Storage:** We are a transit point, not an archive. Once it's gone, it's gone forever.
     """)
     
     col1, col2, col3 = st.columns(3)
@@ -65,5 +73,5 @@ with st.container():
     with col3:
         st.write("We don't keep copies.")
 
-st.subheader("Blush it! because some words are better when they don't linger.")
+st.subheader("Blush 💗, Where feelings find a safe place to go.")
 st.markdown("<p style='text-align: center; color:#888;'>2026 | Prashant Gupta | Developed with Blush 💗</p>", unsafe_allow_html=True)
