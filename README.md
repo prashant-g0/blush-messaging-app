@@ -1,15 +1,18 @@
-# 🌸 Blush
+# 🌸 Blush | Your Secure, Ephemeral Secret Vault
 
-### Blush is a minimal, privacy-first web app that lets you send a message meant to be read only once.
+**Blush** is a privacy-first web application designed for the moments when words deserve to be felt, but not necessarily stored forever. It bridges the gap between private, encrypted communication and public, community-driven confessions.
 
 **No accounts. | No tracking. | No history.**
 
-#### ✨ What is Blush?
+## 🌷 The Core Philosophy
+In an era of permanent digital footprints, **Blush** offers a space for the "unsaid". Whether it’s a private message for a specific person or an anonymous post on the Wall, everything is designed to fade away—just like a shared secret should.
 
-Blush is built for moments that don’t need permanence.
-It allows you to create a one-time, encrypted message that can be unlocked only by the intended recipient.
+--- 
+## 🛣️ Two Distinct Paths:
+1. **Private Blush:** A password-protected, AES-256 encrypted note that vanishes in **6 hours**.
+2. **Wall of Confessions:** An anonymous public square for community sharing, where posts vanish after **7 days**.
 
-**If replied, it becomes a complete conversation.**
+---
 
 #### 🔐 Core Principles
 - One-time access: messages can be opened only once
@@ -30,10 +33,12 @@ It allows you to create a one-time, encrypted message that can be unlocked only 
 #### 🛠️ Tech Stack
 - Frontend & Backend: Python + Streamlit
 - Database: Supabase (PostgreSQL)
-- Security:
+- Automation: PostgreSQL Cron Jobs for auto-purging data
+- Security: `cryptography` library (AES-256)
 - - Password hashing (bcrypt)
 - - Message encryption (Fernet / AES)
 - Hosting: Streamlit Community Cloud
+
 
 #### 🔒 Security Overview
 - Passwords are hashed, never stored in plain text
