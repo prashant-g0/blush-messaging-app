@@ -202,8 +202,7 @@ def create_confession(receiver_name, content, creator_ip):
     }
     try:
         supabase.table("confessions").insert(data).execute()
-        current_all_time = get_all_time_conf()
-        supabase.table("global_stats").update({"confessions_total": current_all_time + 1}).eq("id", 1).execute()
+        supabase.rpc("increment_confessions_total").execute()
         return True
     except Exception as e:
         print(f"Error creating confession: {e}")
