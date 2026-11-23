@@ -160,7 +160,7 @@ SUPABASE_KEY=your_supabase_key
 ### Run Locally
 
 ```bash
-streamlit run Home.py
+streamlit run app.py
 ```
 
 Application will be available at:
