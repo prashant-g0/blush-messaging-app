@@ -9,5 +9,6 @@ dependencies = [
     "python-dotenv>=1.2.1",
     "st-copy-to-clipboard>=0.1.6",
     "streamlit>=1.54.0",
+    "streamlit-autorefresh>=1.0.1",
     "supabase>=2.27.3",
 ]
