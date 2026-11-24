@@ -35,6 +35,13 @@ By combining strong encryption, automatic expiration, one-time access controls, 
 
 ##  Features
 
+###  Anonymous Two-Way Conversations
+
+- Password-protected, encrypted creator and recipient conversations
+- Private creator management link and shareable recipient link
+- Automatic 24-hour expiry and 10-message limit
+- Five-failure password lock and read-only closed/expired states
+
 ###  Private Blush
 
 Create secure, password-protected notes that:
