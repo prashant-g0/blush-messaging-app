@@ -2,21 +2,26 @@ import streamlit as st
 import datetime
 from engine.manager import get_confessions, create_confession
 from engine.safety import is_safe, get_remote_ip
+from engine.theme import inject_theme, page_header, page_footer
 
 st.set_page_config(
     page_title="Blush | Confession Wall", 
     page_icon="🕊️",
     layout="wide")
 
-st.title("🕊️ Wall of Confessions")
-st.markdown("A public space for the words you've been holding back. Secrets here vanish in 7 days.")
+inject_theme()
+page_header(
+    "Community wall",
+    "Wall of Confessions 🕊️",
+    "A public place for the words you've been holding back. Confessions vanish after seven days.",
+)
 
 # --- SECTION: Post a Confession ---
-with st.expander("📝 Write a Public Confession"):
-    c_name = st.text_input("To (Name)", placeholder="e.g. Satvik")
-    c_text = st.text_area("Your Confession", placeholder="Write it out...", max_chars=300)
-    
-    if st.button("Post to Wall", use_container_width=True):
+with st.expander("Write a public confession", expanded=True):
+    c_name = st.text_input("To", placeholder="e.g. Satvik")
+    c_text = st.text_area("Confession", placeholder="Write it out...", height=120, max_chars=300)
+
+    if st.button("Post to wall 🌸", type="primary", use_container_width=True):
         user_ip = get_remote_ip()
         
         if not c_name or not c_text:
@@ -28,9 +33,8 @@ with st.expander("📝 Write a Public Confession"):
                 st.toast("Pinned to the wall! ✨")
                 st.rerun()
 
-st.divider()
-
 # --- SECTION: Search & The Wall ---
+st.markdown("### Recent confessions")
 search = st.text_input("🔍 Search for a name", placeholder="Who are you looking for?")
 results = get_confessions(search)
 
@@ -42,7 +46,7 @@ else:
     for idx, item in enumerate(results):
         with cols[idx % 3]:
             with st.container(border=True):
-                st.subheader(f"To: {item['receiver_name']}")
+                st.markdown(f"**To: {item['receiver_name']}**")
                 st.write(item['content'])
                 
                 # Format the creation time
@@ -55,4 +59,4 @@ else:
 
                 st.caption(f"🕒 {local_date.strftime('%b %d, %I:%M %p')}")
 
-st.markdown("<p style='text-align: center; color:#888;'>2026 | Prashant Gupta | Developed with Blush 💗</p>", unsafe_allow_html=True)
+page_footer()

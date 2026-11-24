@@ -2,8 +2,15 @@ import streamlit as st
 from engine.manager import verify_and_lock, submit_reply, reject_blush, report_blush
 from engine.encryption import decrypt_text
 from engine.safety import is_safe, get_remote_ip
+from engine.theme import inject_theme, page_header, page_footer
 
-st.set_page_config(page_title="Blush | Open a Blush", page_icon="🔓")
+st.set_page_config(page_title="Blush | Open a Blush", page_icon="🔓", layout="wide")
+inject_theme()
+page_header(
+    "Private Blush",
+    "Unlock a Blush 🔓",
+    "Open only when you're ready. This space is meant for one private exchange.",
+)
 
 # 1. Initialize Session State
 if "auth_code" not in st.session_state:
@@ -11,11 +18,9 @@ if "auth_code" not in st.session_state:
     st.session_state.blush_data = None
     st.session_state.current_status = None
 
-st.title("Unlock a Blush 🔓")
-
 # --- PHASE 1: LOGIN (Show only if not authenticated) ---
 if st.session_state.auth_code is None:
-    with st.container():
+    with st.container(border=True):
         url_params = st.query_params
         default_code = url_params.get("code", "") 
 
@@ -64,40 +69,60 @@ else:
     if status == "reading":
         st.snow()
         st.success(f"A Blush from {data['sender_name']} is waiting for you!")
-        st.write("---")
-        decrypted_message = decrypt_text(data['message'], pass_input)
-        st.text_area(label="The Blush, Just for you:",value=decrypted_message, height="content")
-        
-        st.write("### Your Response")
-        reply_text = st.text_area("Write a reply...", placeholder="What's on your mind...", max_chars=500)
-        
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            if st.button("Send Reply 💗"):
-                if not is_safe(reply_text): st.error("⚠️ This reply contains flagged language. Please keep it respectful.")
+        with st.container(border=True):
+            decrypted_message = decrypt_text(data['message'], pass_input)
+
+            st.markdown("### The message")
+            st.write(decrypted_message)
+
+        with st.container(border=True):
+            st.markdown("### Your response")
+
+            reply_text = st.text_area(
+                "Reply",
+                placeholder="What's on your mind...",
+                height=150,
+                max_chars=500
+            )
+
+            if st.button(
+                "Send reply 💗",
+                type="primary",
+                use_container_width=True
+            ):
+                if not is_safe(reply_text):
+                    st.error(
+                        "This reply contains flagged language. Please keep it respectful."
+                    )
                 elif reply_text:
                     if submit_reply(code, reply_text, pass_input):
                         st.success("The Blush continues 🌷")
-                        # Clear session so they can't see it again
                         del st.session_state.temp_pass
-                        st.session_state.auth_code = None 
+                        st.session_state.auth_code = None
                         st.rerun()
                 else:
                     st.warning("Say at least one honest line.")
-        
-        with col2:
-            if st.button("Let It Stay Unanswered"):
+
+            if st.button(
+                "Leave unanswered",
+                use_container_width=True
+            ):
                 if reject_blush(code):
                     st.warning("Message rejected.")
                     del st.session_state.temp_pass
                     st.session_state.auth_code = None
                     st.rerun()
-        
-        with col3:
-            if st.button("⚠️ Report"):
+
+            if st.button(
+                "Report message",
+                use_container_width=True
+            ):
                 current_ip = get_remote_ip()
+
                 if report_blush(code, current_ip):
-                    st.warning("Thank you. We'll review usage patterns to keep Blush safe.")
+                    st.warning(
+                        "Thank you. We'll review usage patterns to keep Blush safe."
+                    )
                     st.session_state.clear()
                     st.rerun()
 
@@ -118,4 +143,4 @@ else:
             st.session_state.auth_code = None
             st.rerun()
 
-st.markdown("<p style='text-align: center; color:#888;'>2026 | Prashant Gupta | Developed with Blush 💗</p>", unsafe_allow_html=True)
+page_footer()
